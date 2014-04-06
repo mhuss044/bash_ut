@@ -36,6 +36,8 @@ function gopeninbackground()
 #	make playlists work
 # 	easier way to shut it down; bcs have to select job, then ^c
 #	there is some junk that is initially disp on startup-> pipe it away
+#
+#	Bug; fix bug where if match more than 1 file, results in loop, 
 
 function mplay()
 {
