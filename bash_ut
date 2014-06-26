@@ -1,0 +1,208 @@
+##############################################################################
+# Aliases File
+##############################################################################
+
+# Directory
+alias ddesktop='cd /home/debgentleman/Desktop'
+alias dgDrive='cd /home/debgentleman/gDrive'
+alias dhome='cd /home/debgentleman'
+alias dmusic='cd /home/debgentleman/Music'
+alias dhwork="cd /home/debgentleman/gDrive/Sync\'d/hw"
+alias dprogramming="cd /home/debgentleman/gDrive/Sync\'d/Programming"
+
+# FilE
+alias fcommandsNote="vi /home/debgentleman/gDrive/Sync\'d/Misc/txt/commandsNote.txt"
+alias faliases="vi /home/debgentleman/gDrive/Sync\'d/Misc/txt/.bash_aliases"
+alias farduino="vi /home/debgentleman/gDrive/Sync\'d/Programming/Arduino/ardInfo.txt"
+
+
+# Actions
+alias reloadaliasfile=". ~/gDrive/Sync\'d/Misc/txt/.bash_aliases"
+alias eclipseandriod="sudo /usr/share/adt-bundle-linux-x86_64-20130917/eclipse/eclipse &"
+alias ..='cd ..' 
+
+#  Funcs
+
+# Google chrome prints out junk, tried to redirect stderr; 2>&2 , and stdout, wont redir
+# still get the junk
+# so open a new term and open gchrome there
+# for some reason, if use gnome-terminal instead of xterm, doesnt run chrome
+#
+function gchromeAuto()
+{
+	xterm google-chrome &
+}
+
+function gopeninbackground()
+{
+	gnome-open $1 &
+}
+
+# mplay func; type part of song title, plays song repeat1
+# fix;
+#	if put char; '-'; get every song; return error; too many matches
+#					  mayb gen a playlist? play that>?
+# VLC commands line options; https://wiki.videolan.org/VLC_command-line_help/
+# Future;
+#	make playlists work
+# 	easier way to shut it down; bcs have to select job, then ^c
+#	there is some junk that is initially disp on startup-> pipe it away
+#	
+#	Fix bug; if get multiple matches, get loop, nothing plays
+
+function mplay()
+{
+	cd ~/Music;
+	sndFile=`ls | grep "$1"`; 	# dir will give you \space
+
+
+	if [ -n "$sndFile" ]; then	# if string is not empty
+
+		#echo "Sfefnd file found; $sndFile"
+
+		#if [ $2 = "r" ]; then
+		#	echo Playing $sndFile, REPEAT1
+		#	cvlc -R -- "$sndFile" &
+		#fi
+		
+		if [ "$2" == "l" ]; then
+			echo Playing $sndFile, LOOP, REAPEAT ALL
+			cvlc -L -- "$sndFile" &
+		fi	
+
+		echo Playing $sndFile, LOOP, REAPEAT ALL
+		cvlc -L -- "$sndFile" &
+
+	else
+		echo No file found by name of $1.	
+	fi
+
+
+	#cvlc "$sndFie" -R & 		# no dquotes; spaces signal endof name?
+	cd $OLDPWD;
+}
+
+# Music Get; 
+#	Listenning to an album on youtube
+#	Hear a tune, note the time, name, 
+#	mget minutes;seconds
+function mget()
+{
+ echo $1 1>> ~/gDrive/Sync\'d/Misc/txt/musicget.txt
+}
+
+function printNumArgsPassed()
+{
+	echo Num args passed: $# 
+	echo 'Num args pass: $#' #doesnt display anything
+}
+
+function waitForProcessesToEnd()
+{
+	/my/process & /another/process & wait			# wait until the above is done
+	echo "All processes done."	
+}
+
+function menuGeeet()
+{
+           OPTIONS="Hello Quit"
+           select opt in $OPTIONS; do
+               if [ "$opt" = "Quit" ]; then
+                echo done
+                exit
+               elif [ "$opt" = "Hello" ]; then
+                echo Hello World
+               else
+                clear
+                echo bad option
+               fi
+           done
+}
+
+function inputGet()
+{
+echo Please, enter your name
+                read NAME
+                echo "Hi $NAME!"
+
+
+	echo Enter 2 vars;
+	read FstVar SecndVar
+	echo "Vars; $FstVar,$SecndVar !" 
+	echo "Enter a reply(multi word string)" #quotes are not optional herE
+	read
+	echo "Your text: $REPLY";
+	echo "Enter arrayble data; gimma list"
+	read -a myList
+	echo "The list: ${myList[0]}, ${myList[1]}"
+
+	myArr=('first element' 'second element' 'third' Ubb 22)
+	numElements=${#myArr[@]}
+	
+	for (( i=0; i<$numElements; i++)); do
+		echo ${myArr[${i}]}
+	done
+	
+	num1=2
+	num2=3
+	if [ $num1 == $num2 ]; then 		#wont work w/o space b/w [] 
+		echo "nums are equal";
+	else
+		echo "nums are not equal";
+	fi
+	
+	string1="ste1"
+	string2="sttt"
+	
+	if [ $string1 = $string2 ]; then	# only 1 =, only for strings 
+		echo "are eq"
+	else
+		echo "not eq"
+	fi
+
+	if [-n $string1 ]; then			# -z for is empty, -n: notempY
+		echo "string is not empty"
+	else
+		echo "string is empty"
+	fi
+
+	COUNT=6
+# bash while loop
+while [ $COUNT -gt 0 ]; do
+	echo Value of count is: $COUNT
+	let COUNT=COUNT-1
+done 
+}
+
+function localVaars()
+{
+ HELLO=Hello 
+                function hello {
+                        local HELLO=World
+                        echo $HELLO
+                }
+                echo $HELLO
+                hello
+                echo $HELLO
+}
+
+# Doesnt seem to work...
+function testParams()
+{
+	if ["$1" = "$2"]; then
+		echo params are equal;
+	else
+		echo params ar enot equal;
+	fi
+}
+
+# Note
+########################################################
+# Exec shell commands
+# echo `uname -o`	#execs
+# echo uname -o 	#no exec
+# batch file testing; http://linuxconfig.org/bash-scripting-tutorial 
+# single quotes supress special meaning of all meta characters
+# double quotes supress every spec char except "$", "\" and "`".
+
+
